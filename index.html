@@ -29,19 +29,36 @@
                 <button class="emotion-btn" data-emotion="shy">😳 Shy</button>
                 <button class="emotion-btn" data-emotion="confused">🤔 Confused</button>
                 <button class="emotion-btn" data-emotion="proud">🥳 Proud</button>
-            </div>
+                <button class="emotion-btn" data-emotion="lonely">😢 Lonely</button> <button class="emotion-btn" data-emotion="disappointed">😞 Disappointed</button> </div>
         </div>
 
         <div id="why-do-stage" class="stage">
             <h2 id="current-emotion-prompt">You're feeling [Emotion Name]!</h2>
-            <p>Can you tell me why you feel <span id="why-emotion-display">[Emotion Name]</span> right now?</p>
-            <textarea id="why-feeling" placeholder="It's okay to share!"></textarea>
 
-            <p>What do you usually do when you feel <span id="what-do-emotion-display">[Emotion Name]</span>?</p>
-            <textarea id="what-do" placeholder="Think about what happens..."></textarea>
+            <div class="question-section">
+                <p>Can you tell me **why** you feel <span id="why-emotion-display">[Emotion Name]</span> right now? (Choose all that apply)</p>
+                <div id="reasons-checkboxes" class="choices-grid">
+                    </div>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="other-reason-checkbox"> My own reason / Something else
+                    <span class="checkmark"></span>
+                </label>
+                <textarea id="why-feeling-other" class="other-textarea" placeholder="Type your own reason here..." rows="3"></textarea>
+            </div>
+
+            <div class="question-section">
+                <p>What do you **usually do** when you feel <span id="what-do-emotion-display">[Emotion Name]</span>? (Choose all that apply)</p>
+                <div id="actions-checkboxes" class="choices-grid">
+                    </div>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="other-action-checkbox"> My own action / Something else
+                    <span class="checkmark"></span>
+                </label>
+                <textarea id="what-do-other" class="other-textarea" placeholder="Type what you usually do here..." rows="3"></textarea>
+            </div>
 
             <button id="next-coping-btn" class="main-btn">What Can I Do?</button>
-            <button id="back-to-emotions-btn" class="secondary-btn">Go back to emotions</button>
+            <button id="back-to-emotions-btn" class="secondary-btn">Go back to feelings</button>
         </div>
 
         <div id="coping-stage" class="stage">
