@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Emotion Navigator</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <div id="intro-stage" class="stage active">
+            <img src="https://via.placeholder.com/150/9ad0c2/ffffff?text=Teacher+Image" alt="Friendly Teacher" class="teacher-img">
+            <p class="intro-text">Hello there, wonderful friend! My name is [Teacher/Coach Name], and I'm so happy you're here. We're going on an adventure to learn all about our amazing feelings!</p>
+            <p class="intro-text">Sometimes our feelings can feel big, and that's okay! Let's find out how you're feeling right now.</p>
+            <button id="start-feelings-btn" class="main-btn">Let's Explore Feelings!</button>
+        </div>
+
+        <div id="emotion-select-stage" class="stage">
+            <h2>How are you feeling right now?</h2>
+            <div class="emotions-grid">
+                <button class="emotion-btn" data-emotion="happy">😃 Happy</button>
+                <button class="emotion-btn" data-emotion="sad">😔 Sad</button>
+                <button class="emotion-btn" data-emotion="angry">😡 Angry</button>
+                <button class="emotion-btn" data-emotion="scared">😨 Scared</button>
+                <button class="emotion-btn" data-emotion="excited">🤩 Excited</button>
+                <button class="emotion-btn" data-emotion="calm">😌 Calm</button>
+                <button class="emotion-btn" data-emotion="frustrated">😤 Frustrated</button>
+                <button class="emotion-btn" data-emotion="shy">😳 Shy</button>
+                <button class="emotion-btn" data-emotion="confused">🤔 Confused</button>
+                <button class="emotion-btn" data-emotion="proud">🥳 Proud</button>
+            </div>
+        </div>
+
+        <div id="why-do-stage" class="stage">
+            <h2 id="current-emotion-prompt">You're feeling [Emotion Name]!</h2>
+            <p>Can you tell me why you feel <span id="why-emotion-display">[Emotion Name]</span> right now?</p>
+            <textarea id="why-feeling" placeholder="It's okay to share!"></textarea>
+
+            <p>What do you usually do when you feel <span id="what-do-emotion-display">[Emotion Name]</span>?</p>
+            <textarea id="what-do" placeholder="Think about what happens..."></textarea>
+
+            <button id="next-coping-btn" class="main-btn">What Can I Do?</button>
+            <button id="back-to-emotions-btn" class="secondary-btn">Go back to emotions</button>
+        </div>
+
+        <div id="coping-stage" class="stage">
+            <h2 id="coping-intro-prompt"></h2>
+            <p id="coping-suggestion-text"></p>
+            <div class="coping-options">
+                </div>
+            <button id="choose-next-action-btn" class="main-btn">What should I do now?</button>
+            <button id="back-to-why-do-btn" class="secondary-btn">Back to my thoughts</button>
+        </div>
+
+        <div id="final-action-stage" class="stage">
+            <h2>You're doing great! What's next?</h2>
+            <div class="final-actions-grid">
+                <button class="action-btn" data-action="try-another-coping">Try Another Coping Strategy</button>
+                <button class="action-btn" data-action="talk-to-adult">Talk to a Grown-Up</button>
+                <button class="action-btn" data-action="play-game">Play a Fun Game</button>
+                <button class="action-btn" data-action="start-over">Start Over</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
