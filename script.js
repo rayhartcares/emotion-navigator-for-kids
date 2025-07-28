@@ -280,18 +280,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Clear and populate checkboxes for reasons
             reasonsCheckboxesContainer.innerHTML = '';
-            emotionContextData[selectedEmotion].reasons.forEach(reason => {
-                createCheckbox('reason', reason, reason, 'reasons', reasonsCheckboxesContainer);
-            });
+            if (emotionContextData[selectedEmotion] && emotionContextData[selectedEmotion].reasons) {
+                emotionContextData[selectedEmotion].reasons.forEach(reason => {
+                    createCheckbox('reason', reason, reason, 'reasons', reasonsCheckboxesContainer);
+                });
+            }
             whyFeelingOtherTextarea.value = '';
             whyFeelingOtherTextarea.style.display = 'none';
             otherReasonCheckbox.checked = false;
 
             // Clear and populate checkboxes for actions
             actionsCheckboxesContainer.innerHTML = '';
-            emotionContextData[selectedEmotion].actions.forEach(action => {
-                createCheckbox('action', action, action, 'actions', actionsCheckboxesContainer);
-            });
+            if (emotionContextData[selectedEmotion] && emotionContextData[selectedEmotion].actions) {
+                emotionContextData[selectedEmotion].actions.forEach(action => {
+                    createCheckbox('action', action, action, 'actions', actionsCheckboxesContainer);
+                });
+            }
             whatDoOtherTextarea.value = '';
             whatDoOtherTextarea.style.display = 'none';
             otherActionCheckbox.checked = false;
@@ -410,28 +414,56 @@ document.addEventListener('DOMContentLoaded', () => {
         showStage(whyDoStage);
     });
 
+    // --- UPDATED FINAL ACTION BUTTONS ---
     finalActionButtons.forEach(button => {
         button.addEventListener('click', () => {
             const action = button.dataset.action;
-            if (action === 'start-over') {
-                alert("Great! Let's start a new feelings journey. Remember to check back anytime you need!");
-                selectedEmotion = ''; // Reset state
-                // Also reset all checkboxes and textareas
-                document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-                document.querySelectorAll('textarea').forEach(ta => ta.value = '');
-                whyFeelingOtherTextarea.style.display = 'none';
-                whatDoOtherTextarea.style.display = 'none';
-                emotionButtons.forEach(btn => btn.classList.remove('selected'));
+            let message = ""; // Initialize message variable
+
+            switch (action) {
+                case 'try-coping':
+                    message = "Great! Trying a coping strategy is a fantastic way to help yourself. Go ahead and pick one that feels right!";
+                    // Instead of an alert, we can directly go back to the coping stage
+                    nextCopingBtn.click(); // This will re-generate coping suggestions if needed, based on current emotion
+                    return; // Exit to prevent further stage changes in this handler
+                case 'talk-to-adult':
+                    message = "That's a super brave choice! Talking to a trusted grown-up (like a parent, teacher, or guardian) is one of the best ways to get support when feelings feel big. They care about you!";
+                    break;
+                case 'mindful-moment':
+                    message = "Awesome! Doing a mindful moment activity, like deep breathing or noticing your senses, can help you feel calm and focused. Give it a try!";
+                    break;
+                case 'calming-activity':
+                    message = "Fantastic idea! Engaging in a calming activity like drawing, listening to soothing music, or reading quietly can help your mind and body relax. Enjoy!";
+                    break;
+                case 'move-body':
+                    message = "Excellent! Moving your body safely (like stretching, dancing, or jumping) is a great way to release energy and boost your mood. Get those wiggles out!";
+                    break;
+                case 'practice-gratitude':
+                    message = "What a wonderful choice! Thinking about things you're grateful for (big or small!) can help you feel more positive and thankful. What are 3 things you're grateful for right now?";
+                    break;
+                case 'start-over':
+                    message = "It's brave to explore your feelings! Whenever you're ready, we can start a new feelings journey. Remember, you can always come back here!";
+                    // Reset all states and inputs for a fresh start
+                    selectedEmotion = '';
+                    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                    document.querySelectorAll('textarea').forEach(ta => ta.value = '');
+                    whyFeelingOtherTextarea.style.display = 'none';
+                    whatDoOtherTextarea.style.display = 'none';
+                    emotionButtons.forEach(btn => btn.classList.remove('selected'));
+                    showStage(introStage);
+                    return; // Exit to prevent the default alert and stage change below
+                default:
+                    message = "You chose to do something! That's great! Keep exploring and learning about your feelings.";
+            }
+
+            // Show alert for actions that don't immediately change stage (and are not 'start-over')
+            if (message) {
+                alert(message);
+            }
+            // For actions that provide advice, loop back to the intro or a relevant stage
+            // For now, let's loop back to the intro after the alert for simplicity
+            if (action !== 'try-coping' && action !== 'start-over') {
                 showStage(introStage);
-            } else if (action === 'talk-to-adult') {
-                alert("That's a super brave choice! Talking to a grown-up can really help. Find someone you trust and share your feelings with them.");
-                showStage(introStage); // Loop back to start after advice
-            } else if (action === 'play-game') {
-                alert("Fantastic! Taking a break to play is a wonderful way to feel better. Go have some fun!");
-                showStage(introStage); // Loop back to start after advice
-            } else if (action === 'try-another-coping') {
-                // Re-run the logic to generate new coping suggestions, keeping context
-                nextCopingBtn.click();
             }
         });
     });
