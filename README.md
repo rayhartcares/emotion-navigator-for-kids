@@ -38,7 +38,7 @@ To run this project locally:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/YOUR_GITHUB_USERNAME/emotion-navigator.git](https://github.com/YOUR_GITHUB_USERNAME/emotion-navigator.git)
+    git clone [https://github.com/rayhartcares/emotion-navigator.git](https://github.com/YOUR_GITHUB_USERNAME/emotion-navigator.git)
     ```
     (Replace `YOUR_GITHUB_USERNAME` with your actual GitHub username)
 2.  **Navigate to the project directory:**
