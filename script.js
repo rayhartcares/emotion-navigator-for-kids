@@ -1,11 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // This console.log should be the very first thing you see if the script loads.
+    console.log("SCRIPT.JS HAS STARTED LOADING AND EXECUTING!");
+
     const appContainer = document.querySelector('.app-container');
     const stages = document.querySelectorAll('.stage');
 
     // Stage Elements
     const introStage = document.getElementById('intro-stage');
     const emotionSelectStage = document.getElementById('emotion-select-stage');
-    const whyDoStage = document.getElementById('why-do-stage'); // This is Stage 3
+    const whyDoStage = document.getElementById('why-do-stage');
     const copingStage = document.getElementById('coping-stage');
     const finalActionStage = document.getElementById('final-action-stage');
 
@@ -162,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { text: "Ask questions", icon: "❓" }, { text: "Try to figure it out", icon: "🔎" },
                 { text: "Feel stuck", icon: "😩" }, { text: "Look for clues", icon: "🔍" },
                 { text: "Feel overwhelmed", icon: "😵" }, { text: "Get a headache", icon: "🤕" }
-            ],
+            ]
         },
         'proud': {
             reasons: [
@@ -268,6 +271,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Helper Functions ---
     function showStage(stageToShow) {
+        console.log(`Transitioning to stage: ${stageToShow.id}`); // Debugging log
+
         // Remove all emotion-specific background classes from the body
         document.body.classList.forEach(cls => {
             if (cls.startsWith('emotion-active-') && cls.endsWith('-bg')) {
@@ -294,6 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Ensure body returns to default background for intro/emotion select stage
             document.body.style.backgroundColor = ''; // Reset to CSS default or initial value
         }
+
 
         appContainer.scrollTop = 0; // Scroll to top of app container when new stage shows
     }
@@ -344,7 +350,6 @@ document.addEventListener('DOMContentLoaded', () => {
         showStage(emotionSelectStage);
     });
 
-    // NEW EVENT LISTENER for back button on Emotion Select Stage
     backToIntroBtn.addEventListener('click', () => {
         showStage(introStage);
     });
@@ -358,8 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
             button.classList.add('selected');
             selectedEmotion = button.dataset.emotion;
 
-            // Update text for next stage
-            const emotionText = button.textContent.split(' ')[1]; // Get just the word, e.g., "Happy"
+            const emotionText = button.textContent.split(' ')[1];
             currentEmotionPrompt.textContent = `You're feeling ${emotionText}!`;
             whyEmotionDisplay.textContent = emotionText;
             whatDoEmotionDisplay.textContent = emotionText;
@@ -560,14 +564,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     message = "You chose to do something! That's great! Keep exploring and learning about your feelings.";
             }
 
-            // Show alert for actions that don't immediately change stage (and are not 'start-over')
-            if (message) {
+            // Show alert for actions that don't immediately change stage (and are not 'start-over' or 'try-coping')
+            if (message && action !== 'try-coping') { // Adjusted condition
                 alert(message);
             }
             // For actions that provide advice, loop back to the intro or a relevant stage
-            // For now, let's loop back to the intro after the alert for simplicity
             if (action !== 'try-coping' && action !== 'start-over') {
-                showStage(introStage);
+                showStage(introStage); // Loop back to start after advice for these options
             }
         });
     });
