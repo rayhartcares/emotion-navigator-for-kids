@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextCopingBtn = document.getElementById('next-coping-btn');
     const backToEmotionsBtn = document.getElementById('back-to-emotions-btn');
     const chooseNextActionBtn = document.getElementById('choose-next-action-btn');
-    const backToWhyDoBtn = document.getElementById('back-to-why-do-btn');
+    const backToWhyDoBtn = document = document.getElementById('back-to-why-do-btn'); // Corrected
     const finalActionButtons = document.querySelectorAll('.action-btn');
     const backToIntroBtn = document.getElementById('back-to-intro-btn');
 
@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'scared': [
             { title: "Grounding Exercise (5-4-3-2-1)", description: "Name 5 things you can see, 4 things you can touch, 3 things you can hear, 2 things you can smell, and 1 thing you can taste. This helps you feel present and safe." },
             { title: "Create a Safety Plan", description: "Think about what would make you feel safer. Can you turn on a light? Call someone? Plan your next steps to feel more secure." },
-            { title: "Face a Small Fear (with support)", description: "If it's a small fear, try facing it a little bit at a time, with a trusted grown-up by your side. You are brave!" }
+            { title: "Face a Small Fear (with support)", description: "If it's a small fear, try facing it a little bit at a time, with a trusted grown-up by your side." }
         ],
         'excited': [
             { title: "Channel Your Energy", description: "Use your excitement for something active and positive! Play a game, build something, or help with a task that uses your energy." },
@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Clear and populate checkboxes for actions
             actionsCheckboxesContainer.innerHTML = '';
-            if (emotionContextData[selectedEmotion] && emotionContextData[selectedEdition].actions) { // BUG FIX: changed edition to selectedEmotion
+            if (emotionContextData[selectedEmotion] && emotionContextData[selectedEmotion].actions) { // CORRECTED LINE
                 emotionContextData[selectedEmotion].actions.forEach(action => {
                     createCheckbox('action', action, 'actions', actionsCheckboxesContainer);
                 });
