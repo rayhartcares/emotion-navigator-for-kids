@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chooseNextActionBtn = document.getElementById('choose-next-action-btn');
     const backToWhyDoBtn = document.getElementById('back-to-why-do-btn');
     const finalActionButtons = document.querySelectorAll('.action-btn');
-    const backToIntroBtn = document.getElementById('back-to-intro-btn'); // NEW BUTTON
+    const backToIntroBtn = document.getElementById('back-to-intro-btn');
 
     // Dynamic Text Elements
     const currentEmotionPrompt = document.getElementById('current-emotion-prompt');
@@ -34,9 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const otherActionCheckbox = document.getElementById('other-action-checkbox');
     const whatDoOtherTextarea = document.getElementById('what-do-other');
     const copingOptionsContainer = document.querySelector('.coping-options');
-    const stage3FeedbackMessage = document.getElementById('stage3-feedback-message'); // NEW FEEDBACK MESSAGE ELEMENT
+    const stage3FeedbackMessage = document.getElementById('stage3-feedback-message');
 
-    // Element for the large emotion emoji in Stage 3
+    // Element for the large emotion emoji in Stage 3 - IMPORTANT: Get it by ID now.
     const largeEmotionEmoji = document.getElementById('large-emotion-emoji');
 
 
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { text: "Ask questions", icon: "❓" }, { text: "Try to figure it out", icon: "🔎" },
                 { text: "Feel stuck", icon: "😩" }, { text: "Look for clues", icon: "🔍" },
                 { text: "Feel overwhelmed", icon: "😵" }, { text: "Get a headache", icon: "🤕" }
-            ]
+            ],
         },
         'proud': {
             reasons: [
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'lonely': {
             reasons: [
                 { text: "I don't have anyone to play with", icon: "🚏" }, { text: "My friends are busy", icon: "📞❌" },
-                { text: "I miss someone far away", icon: " faraway " }, { text: "I feel left out by others", icon: "🚫" },
+                { text: "I miss someone far away", icon: " faraway " }, { text: "I felt left out by others", icon: "🚫" },
                 { text: "I want company", icon: "🫂" }, { text: "I'm by myself for a long time", icon: "⏳" }
             ],
             actions: [
@@ -268,40 +268,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Helper Functions ---
     function showStage(stageToShow) {
-        // Remove any emotion-specific background classes from previous stages on the body
+        // Remove all emotion-specific background classes from the body
         document.body.classList.forEach(cls => {
             if (cls.startsWith('emotion-active-') && cls.endsWith('-bg')) {
                 document.body.classList.remove(cls);
             }
         });
-        // Remove specific background class from whyDoStage itself
-        whyDoStage.classList.forEach(cls => {
-            if (cls.startsWith('emotion-active-')) {
-                whyDoStage.classList.remove(cls);
-            }
-        });
 
-
+        // Hide all stages first
         stages.forEach(stage => {
             stage.classList.remove('active');
-            stage.style.display = 'none'; // Ensure it's hidden for proper re-display
+            stage.style.display = 'none';
         });
-        stageToShow.style.display = 'block'; // Ensure it's displayed before adding active
-        setTimeout(() => { // Add active class after a tiny delay for animation
+
+        // Display the target stage
+        stageToShow.style.display = 'block';
+        setTimeout(() => {
             stageToShow.classList.add('active');
         }, 10);
 
-        // Apply emotion-specific background to body when going to whyDoStage (Stage 3)
-        if (stageToShow === whyDoStage && selectedEmotion) {
+        // Apply emotion-specific background to body if selectedEmotion is active and not intro/emotion select stage
+        if (selectedEmotion && (stageToShow === whyDoStage || stageToShow === copingStage || stageToShow === finalActionStage)) {
             document.body.classList.add(`emotion-active-${selectedEmotion}-bg`);
-        } else if (stageToShow === copingStage && selectedEmotion) {
-             // If going to coping stage, ensure body background matches previous emotion choice's color
-            document.body.classList.add(`emotion-active-${selectedEmotion}-bg`);
-        } else if (stageToShow === finalActionStage && selectedEmotion) {
-            // If going to final action stage, ensure body background matches previous emotion choice's color
-            document.body.classList.add(`emotion-active-${selectedEmotion}-bg`);
+        } else if (stageToShow === introStage || stageToShow === emotionSelectStage) {
+            // Ensure body returns to default background for intro/emotion select stage
+            document.body.style.backgroundColor = ''; // Reset to CSS default or initial value
         }
-
 
         appContainer.scrollTop = 0; // Scroll to top of app container when new stage shows
     }
@@ -365,9 +357,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Select current
             button.classList.add('selected');
             selectedEmotion = button.dataset.emotion;
-
-            // Apply emotion-specific class to Stage 3 for subtle background changes (handled in showStage)
-            // It will be applied when showStage is called for whyDoStage
 
             // Update text for next stage
             const emotionText = button.textContent.split(' ')[1]; // Get just the word, e.g., "Happy"
@@ -564,11 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     whatDoOtherTextarea.style.display = 'none';
                     emotionButtons.forEach(btn => btn.classList.remove('selected'));
                     largeEmotionEmoji.textContent = ''; // Clear the large emoji as well
-                    whyDoStage.classList.forEach(cls => { // Remove any emotion-specific class
-                        if (cls.startsWith('emotion-active-')) {
-                            whyDoStage.classList.remove(cls);
-                        }
-                    });
+                    // The showStage function itself will handle removing emotion-active-bg class from body
                     showStage(introStage);
                     return; // Exit to prevent the default alert and stage change below
                 default:
