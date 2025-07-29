@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Stage Elements
     const introStage = document.getElementById('intro-stage');
     const emotionSelectStage = document.getElementById('emotion-select-stage');
-    const whyDoStage = document.getElementById('why-do-stage');
+    const whyDoStage = document.getElementById('why-do-stage'); // This is Stage 3
     const copingStage = document.getElementById('coping-stage');
     const finalActionStage = document.getElementById('final-action-stage');
 
@@ -34,136 +34,175 @@ document.addEventListener('DOMContentLoaded', () => {
     const whatDoOtherTextarea = document.getElementById('what-do-other');
     const copingOptionsContainer = document.querySelector('.coping-options');
 
+    // New element for the large emotion emoji in Stage 3
+    const largeEmotionEmoji = document.createElement('span');
+    largeEmotionEmoji.id = 'large-emotion-emoji';
+    largeEmotionEmoji.style.fontSize = '3em'; // Make it large
+    largeEmotionEmoji.style.display = 'block';
+    largeEmotionEmoji.style.marginBottom = '10px';
+    // Insert it right after the currentEmotionPrompt h2
+    currentEmotionPrompt.parentNode.insertBefore(largeEmotionEmoji, currentEmotionPrompt.nextSibling);
+
 
     let selectedEmotion = '';
     let teacherName = "Ms. Rayhart"; // Customize your teacher's name here!
 
-    // --- Data: Reasons & Actions for each Emotion ---
+    // --- Emotion Emoji Map (for displaying the large emoji) ---
+    const emotionEmojiMap = {
+        'happy': '😃', 'sad': '😔', 'angry': '😡', 'scared': '😨', 'excited': '🤩',
+        'calm': '😌', 'frustrated': '😤', 'shy': '😳', 'confused': '🤔', 'proud': '🥳',
+        'lonely': '😢', 'disappointed': '😞'
+    };
+
+    // --- Data: Reasons & Actions for each Emotion (Now with icons/emojis!) ---
     const emotionContextData = {
         'happy': {
             reasons: [
-                "I played with my friends", "Someone was kind to me", "I learned something new",
-                "I achieved a goal", "I spent time with my family", "I helped someone"
+                { text: "I played with my friends", icon: "🤝" }, { text: "Someone was kind to me", icon: "💖" },
+                { text: "I learned something new", icon: "💡" }, { text: "I achieved a goal", icon: "🏆" },
+                { text: "I spent time with my family", icon: "👨‍👩‍👧‍👦" }, { text: "I helped someone", icon: "✨" }
             ],
             actions: [
-                "Smile a lot", "Share my joy with others", "Play more",
-                "Keep it to myself", "Laugh", "Hug someone"
+                { text: "Smile a lot", icon: "😁" }, { text: "Share my joy with others", icon: "📣" },
+                { text: "Play more", icon: "🤸" }, { text: "Keep it to myself", icon: "🤫" },
+                { text: "Laugh", icon: "😂" }, { text: "Hug someone", icon: "🫂" }
             ]
         },
         'sad': {
             reasons: [
-                "I miss someone", "Something didn't go my way", "I felt left out",
-                "Someone was unkind", "I lost something important", "I didn't get what I wanted"
+                { text: "I miss someone", icon: "🥺" }, { text: "Something didn't go my way", icon: "👎" },
+                { text: "I felt left out", icon: "🚪" }, { text: "Someone was unkind", icon: "💔" },
+                { text: "I lost something important", icon: "📉" }, { text: "I didn't get what I wanted", icon: "🎁❌" }
             ],
             actions: [
-                "Cry", "Hide or be alone", "Talk to someone",
-                "Draw or write", "Listen to music", "Watch TV/screen"
+                { text: "Cry", icon: "💧" }, { text: "Hide or be alone", icon: "👤" },
+                { text: "Talk to someone", icon: "🗣️" }, { text: "Draw or write", icon: "✍️" },
+                { text: "Listen to music", icon: "🎧" }, { text: "Watch TV/screen", icon: "📺" }
             ]
         },
         'angry': {
             reasons: [
-                "Someone wasn't fair", "My plans changed unexpectedly", "I felt misunderstood",
-                "I had to wait a long time", "Someone took my stuff", "I felt controlled"
+                { text: "Someone wasn't fair", icon: "⚖️" }, { text: "My plans changed unexpectedly", icon: "📅❌" },
+                { text: "I felt misunderstood", icon: "❓" }, { text: "I had to wait a long time", icon: "⏳" },
+                { text: "Someone took my stuff", icon: " छीन " }, { text: "I felt controlled", icon: "🔗" }
             ],
             actions: [
-                "Yell or scream", "Hit or throw something (like a pillow)", "Talk to a grown-up",
-                "Take deep breaths", "Go to my room", "Punch something (like a cushion)"
+                { text: "Yell or scream", icon: "😡" }, { text: "Hit or throw something (like a pillow)", icon: "💥" },
+                { text: "Talk to a grown-up", icon: "💬" }, { text: "Take deep breaths", icon: "🌬️" },
+                { text: "Go to my room", icon: "🚪" }, { text: "Punch something (like a cushion)", icon: "🥊" }
             ]
         },
         'scared': {
             reasons: [
-                "I saw something spooky", "I'm worried about something new", "I heard a loud noise",
-                "I'm afraid of the dark", "I feel unsafe", "I'm worried about what might happen"
+                { text: "I saw something spooky", icon: "👻" }, { text: "I'm worried about something new", icon: "😬" },
+                { text: "I heard a loud noise", icon: "🔊" }, { text: "I'm afraid of the dark", icon: "🌑" },
+                { text: "I feel unsafe", icon: "⚠️" }, { text: "I'm worried about what might happen", icon: "🔮" }
             ],
             actions: [
-                "Hide", "Run away", "Ask for a hug",
-                "Tell a grown-up", "Close my eyes", "Make myself small"
+                { text: "Hide", icon: "🙈" }, { text: "Run away", icon: "🏃" },
+                { text: "Ask for a hug", icon: "🤗" }, { text: "Tell a grown-up", icon: "🗣️" },
+                { text: "Close my eyes", icon: "🫣" }, { text: "Make myself small", icon: "🤏" }
             ]
         },
         'excited': {
             reasons: [
-                "Something fun is happening soon", "I got a new toy/game", "I'm going on a trip",
-                "I'm seeing someone I love", "I achieved something I worked hard for", "I'm doing something I love"
+                { text: "Something fun is happening soon", icon: "🎉" }, { text: "I got a new toy/game", icon: "🎁" },
+                { text: "I'm going on a trip", icon: "✈️" }, { text: "I'm seeing someone I love", icon: "💖" },
+                { text: "I achieved something I worked hard for", icon: "🌟" }, { text: "I'm doing something I love", icon: "❤️" }
             ],
             actions: [
-                "Jump around", "Talk very fast", "Tell everyone",
-                "Smile a lot", "Can't sit still", "Plan what to do next"
+                { text: "Jump around", icon: "🤸" }, { text: "Talk very fast", icon: "💨" },
+                { text: "Tell everyone", icon: "📣" }, { text: "Smile a lot", icon: "😁" },
+                { text: "Can't sit still", icon: " fidgeting " }, { text: "Plan what to do next", icon: "🗓️" }
             ]
         },
         'calm': {
             reasons: [
-                "I'm feeling peaceful", "I finished a task", "I spent time in nature",
-                "I listened to quiet music", "I had a warm bath", "I just woke up rested"
+                { text: "I'm feeling peaceful", icon: "🧘" }, { text: "I finished a task", icon: "✅" },
+                { text: "I spent time in nature", icon: "🌳" }, { text: "I listened to quiet music", icon: "🎶" },
+                { text: "I had a warm bath", icon: "🛀" }, { text: "I just woke up rested", icon: "🛌" }
             ],
             actions: [
-                "Breathe slowly", "Feel relaxed", "Sit quietly",
-                "Read a book", "Draw or color calmly", "Cuddle with a pet"
+                { text: "Breathe slowly", icon: "🌬️" }, { text: "Feel relaxed", icon: "😌" },
+                { text: "Sit quietly", icon: "🪑" }, { text: "Read a book", icon: "📖" },
+                { text: "Draw or color calmly", icon: "🖍️" }, { text: "Cuddle with a pet", icon: "🐶" }
             ]
         },
         'frustrated': {
             reasons: [
-                "Something is too hard", "I can't figure it out", "Things aren't going my way",
-                "I'm stuck on a task", "Someone isn't listening to me", "I feel helpless"
+                { text: "Something is too hard", icon: "🤯" }, { text: "I can't figure it out", icon: "🤔" },
+                { text: "Things aren't going my way", icon: "🚫" }, { text: "I'm stuck on a task", icon: "⛓️" },
+                { text: "Someone isn't listening to me", icon: "👂❌" }, { text: "I feel helpless", icon: "🤷" }
             ],
             actions: [
-                "Sigh a lot", "Give up", "Try harder",
-                "Ask for help", "Take a break", "Get angry"
+                { text: "Sigh a lot", icon: "😮‍💨" }, { text: "Give up", icon: "🏳️" },
+                { text: "Try harder", icon: "💪" }, { text: "Ask for help", icon: "🙋" },
+                { text: "Take a break", icon: "⏸️" }, { text: "Get angry", icon: "😡" }
             ]
         },
         'shy': {
             reasons: [
-                "I'm in a new place", "I don't know many people", "I feel nervous to speak",
-                "I'm worried about what others think", "I don't want to be noticed", "I feel unsure"
+                { text: "I'm in a new place", icon: "낯선" }, { text: "I don't know many people", icon: "👥" },
+                { text: "I feel nervous to speak", icon: "🤐" }, { text: "I'm worried about what others think", icon: "👀" },
+                { text: "I don't want to be noticed", icon: "🔦" }, { text: "I feel unsure", icon: "🤔" }
             ],
             actions: [
-                "Hide behind a grown-up", "Speak softly", "Avoid eye contact",
-                "Stay quiet", "Play alone", "Blush"
+                { text: "Hide behind a grown-up", icon: "🧍‍♀️" }, { text: "Speak softly", icon: "🤫" },
+                { text: "Avoid eye contact", icon: "↔️" }, { text: "Stay quiet", icon: "🔇" },
+                { text: "Play alone", icon: "🧩" }, { text: "Blush", icon: " blushing " }
             ]
         },
         'confused': {
             reasons: [
-                "I don't understand something", "The instructions are unclear", "Something unexpected happened",
-                "I have too many thoughts", "I don't know what to do next", "Things don't make sense"
+                { text: "I don't understand something", icon: "🤷" }, { text: "The instructions are unclear", icon: "📜❌" },
+                { text: "Something unexpected happened", icon: "🤯" }, { text: "I have too many thoughts", icon: "🤯" },
+                { text: "I don't know what to do next", icon: "➡️❓" }, { text: "Things don't make sense", icon: "🤯" }
             ],
             actions: [
-                "Ask questions", "Try to figure it out", "Feel stuck",
-                "Look for clues", "Feel overwhelmed", "Get a headache"
+                { text: "Ask questions", icon: "❓" }, { text: "Try to figure it out", icon: "🔎" },
+                { text: "Feel stuck", icon: "😩" }, { text: "Look for clues", icon: "🔍" },
+                { text: "Feel overwhelmed", icon: "😵" }, { text: "Get a headache", icon: "🤕" }
             ]
         },
         'proud': {
             reasons: [
-                "I did something difficult", "I finished a big project", "I helped someone important",
-                "I got good marks/feedback", "I learned a new skill", "I did my best"
+                { text: "I did something difficult", icon: "💪" }, { text: "I finished a big project", icon: "✅" },
+                { text: "I helped someone important", icon: "🌟" }, { text: "I got good marks/feedback", icon: "💯" },
+                { text: "I learned a new skill", icon: "🧠" }, { text: "I did my best", icon: "🥇" }
             ],
             actions: [
-                "Smile big", "Tell others about it", "Feel strong",
-                "Want to do it again", "Feel confident", "Celebrate"
+                { text: "Smile big", icon: "😃" }, { text: "Tell others about it", icon: "📣" },
+                { text: "Feel strong", icon: "🤩" }, { text: "Want to do it again", icon: "🔁" },
+                { text: "Feel confident", icon: "😎" }, { text: "Celebrate", icon: "🥳" }
             ]
         },
         'lonely': {
             reasons: [
-                "I don't have anyone to play with", "My friends are busy", "I miss someone far away",
-                "I feel left out by others", "I want company", "I'm by myself for a long time"
+                { text: "I don't have anyone to play with", icon: "🚏" }, { text: "My friends are busy", icon: "📞❌" },
+                { text: "I miss someone far away", icon: " faraway " }, { text: "I feel left out by others", icon: "🚫" },
+                { text: "I want company", icon: "🫂" }, { text: "I'm by myself for a long time", icon: "⏳" }
             ],
             actions: [
-                "Feel sad", "Watch TV/screens", "Call someone",
-                "Play alone", "Think about friends", "Try to find someone"
+                { text: "Feel sad", icon: "😔" }, { text: "Watch TV/screens", icon: "📺" },
+                { text: "Call someone", icon: "📞" }, { text: "Play alone", icon: "🧩" },
+                { text: "Think about friends", icon: "💭" }, { text: "Try to find someone", icon: "🔎" }
             ]
         },
         'disappointed': {
             reasons: [
-                "My plans didn't work out", "I didn't get what I hoped for", "Someone let me down",
-                "I didn't win/succeed", "Something I looked forward to was cancelled", "Things aren't fair"
+                { text: "My plans didn't work out", icon: "🗓️❌" }, { text: "I didn't get what I hoped for", icon: "😞" },
+                { text: "Someone let me down", icon: "💔" }, { text: "I didn't win/succeed", icon: "🥈" },
+                { text: "Something I looked forward to was cancelled", icon: "🚫" }, { text: "Things aren't fair", icon: "⚖️" }
             ],
             actions: [
-                "Feel sad", "Feel frustrated", "Give up",
-                "Try to understand why", "Cry", "Want to try again"
+                { text: "Feel sad", icon: "😔" }, { text: "Feel frustrated", icon: "😤" },
+                { text: "Give up", icon: "🏳️" }, { text: "Try to understand why", icon: "🤔" },
+                { text: "Cry", icon: "💧" }, { text: "Want to try again", icon: "💪" }
             ]
         }
     };
 
     // --- Data: Coping Mechanisms (Scientifically Supported) ---
-    // Each emotion now has its distinct strategies.
     const emotionCopingStrategies = {
         'happy': [
             { title: "Share Your Joy", description: "Tell someone how happy you feel! Sharing makes joy even bigger. Call a friend or tell a family member." },
@@ -229,6 +268,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Helper Functions ---
     function showStage(stageToShow) {
+        // Remove any emotion-specific background classes from previous stage
+        whyDoStage.classList.forEach(cls => {
+            if (cls.startsWith('emotion-active-')) {
+                whyDoStage.classList.remove(cls);
+            }
+        });
+
         stages.forEach(stage => {
             stage.classList.remove('active');
             stage.style.display = 'none'; // Ensure it's hidden for proper re-display
@@ -247,12 +293,17 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Playing intro audio (placeholder)");
     }
 
-    function createCheckbox(idPrefix, value, text, name, container) {
+    // Updated createCheckbox to include an icon/emoji
+    function createCheckbox(idPrefix, item, name, container) {
         const label = document.createElement('label');
         label.classList.add('checkbox-container');
+        // Check if item has an icon property, prepend it to the text
+        const displayText = item.icon ? `${item.icon} ${item.text}` : item.text;
+        const value = item.text; // Use text as value for consistency
+
         label.innerHTML = `
             <input type="checkbox" id="${idPrefix}-${value.replace(/\s+/g, '-').toLowerCase()}" name="${name}" value="${value}">
-            ${text}
+            ${displayText}
             <span class="checkmark"></span>
         `;
         container.appendChild(label);
@@ -272,17 +323,24 @@ document.addEventListener('DOMContentLoaded', () => {
             button.classList.add('selected');
             selectedEmotion = button.dataset.emotion;
 
+            // Apply emotion-specific class to Stage 3 for styling
+            whyDoStage.classList.add('emotion-active-' + selectedEmotion);
+
             // Update text for next stage
             const emotionText = button.textContent.split(' ')[1]; // Get just the word, e.g., "Happy"
             currentEmotionPrompt.textContent = `You're feeling ${emotionText}!`;
             whyEmotionDisplay.textContent = emotionText;
             whatDoEmotionDisplay.textContent = emotionText;
 
+            // Display the large emotion emoji in Stage 3 header
+            largeEmotionEmoji.textContent = emotionEmojiMap[selectedEmotion] || '';
+
+
             // Clear and populate checkboxes for reasons
             reasonsCheckboxesContainer.innerHTML = '';
             if (emotionContextData[selectedEmotion] && emotionContextData[selectedEmotion].reasons) {
                 emotionContextData[selectedEmotion].reasons.forEach(reason => {
-                    createCheckbox('reason', reason, reason, 'reasons', reasonsCheckboxesContainer);
+                    createCheckbox('reason', reason, 'reasons', reasonsCheckboxesContainer);
                 });
             }
             whyFeelingOtherTextarea.value = '';
@@ -293,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
             actionsCheckboxesContainer.innerHTML = '';
             if (emotionContextData[selectedEmotion] && emotionContextData[selectedEmotion].actions) {
                 emotionContextData[selectedEmotion].actions.forEach(action => {
-                    createCheckbox('action', action, action, 'actions', actionsCheckboxesContainer);
+                    createCheckbox('action', action, 'actions', actionsCheckboxesContainer);
                 });
             }
             whatDoOtherTextarea.value = '';
@@ -450,6 +508,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     whyFeelingOtherTextarea.style.display = 'none';
                     whatDoOtherTextarea.style.display = 'none';
                     emotionButtons.forEach(btn => btn.classList.remove('selected'));
+                    largeEmotionEmoji.textContent = ''; // Clear the large emoji as well
+                    whyDoStage.classList.forEach(cls => { // Remove any emotion-specific class
+                        if (cls.startsWith('emotion-active-')) {
+                            whyDoStage.classList.remove(cls);
+                        }
+                    });
                     showStage(introStage);
                     return; // Exit to prevent the default alert and stage change below
                 default:
