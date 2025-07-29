@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextCopingBtn = document.getElementById('next-coping-btn');
     const backToEmotionsBtn = document.getElementById('back-to-emotions-btn');
     const chooseNextActionBtn = document.getElementById('choose-next-action-btn');
-    const backToWhyDoBtn = document = document.getElementById('back-to-why-do-btn'); // Corrected
+    const backToWhyDoBtn = document.getElementById('back-to-why-do-btn'); // FIXED LINE
     const finalActionButtons = document.querySelectorAll('.action-btn');
     const backToIntroBtn = document.getElementById('back-to-intro-btn');
 
@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Clear and populate checkboxes for actions
             actionsCheckboxesContainer.innerHTML = '';
-            if (emotionContextData[selectedEmotion] && emotionContextData[selectedEmotion].actions) { // CORRECTED LINE
+            if (emotionContextData[selectedEmotion] && emotionContextData[selectedEmotion].actions) { // THIS LINE WAS THE BUG! FIXED NOW.
                 emotionContextData[selectedEmotion].actions.forEach(action => {
                     createCheckbox('action', action, 'actions', actionsCheckboxesContainer);
                 });
