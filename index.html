@@ -10,8 +10,8 @@
 <body>
     <div class="app-container">
         <div id="intro-stage" class="stage active">
-          <img src="https://raw.githubusercontent.com/rayhartcares/emotion-navigator-for-kids/main/assets/bhccc.png" alt="Friendly Teacher" class="teacher-img">
-            <p class="intro-text">Hello there, wonderful friend! My name is <span id="teacher-name-display"> Ms Benne Hart  </span>, and I'm so happy you're here. We're going on an adventure to learn all about our amazing feelings!</p>
+            <img src="https://raw.githubusercontent.com/rayhartcares/emotion-navigator-for-kids/main/assets/bhccc.png" alt="Friendly Teacher" class="teacher-img">
+            <p class="intro-text">Hello there, wonderful friend! My name is <span id="teacher-name-display">[Teacher/Coach Name]</span>, and I'm so happy you're here. We're going on an adventure to learn all about our amazing feelings!</p>
             <p class="intro-text">Sometimes our feelings can feel big, and that's okay! Let's find out how you're feeling right now.</p>
             <button id="start-feelings-btn" class="main-btn">Let's Explore Feelings!</button>
         </div>
@@ -37,7 +37,9 @@
 
         <div id="why-do-stage" class="stage">
             <h2 id="current-emotion-prompt">You're feeling [Emotion Name]!</h2>
-            <span id="large-emotion-emoji" class="large-emotion-emoji-style"></span> <div class="question-section">
+            <span id="large-emotion-emoji" class="large-emotion-emoji-style"></span>
+
+            <div class="question-section">
                 <p>Can you tell me **why** you feel <span id="why-emotion-display">[Emotion Name]</span> right now? (Choose all that apply)</p>
                 <div id="reasons-checkboxes" class="choices-grid">
                     </div>
@@ -46,7 +48,7 @@
                     <span class="checkmark"></span>
                 </label>
                 <textarea id="why-feeling-other" class="other-textarea" placeholder="Type your own reason here..." rows="3"></textarea>
-            </div>
+                <span id="why-flash-message" class="flash-message why-message"></span> </div>
 
             <div class="question-section">
                 <p>What do you **usually do** when you feel <span id="what-do-emotion-display">[Emotion Name]</span>? (Choose all that apply)</p>
@@ -57,8 +59,7 @@
                     <span class="checkmark"></span>
                 </label>
                 <textarea id="what-do-other" class="other-textarea" placeholder="Type what you usually do here..." rows="3"></textarea>
-
-                <p id="stage3-feedback-message" class="feedback-message">It's brave to share your feelings! When you're ready, click 'What Can I Do?'</p>
+                <span id="what-do-flash-message" class="flash-message what-do-message"></span> <p id="stage3-feedback-message" class="feedback-message">It's brave to share your feelings! When you're ready, click 'What Can I Do?'</p>
             </div>
 
             <button id="next-coping-btn" class="main-btn">What Can I Do?</button>
