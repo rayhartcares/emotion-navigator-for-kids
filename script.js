@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextCopingBtn = document.getElementById('next-coping-btn');
     const backToEmotionsBtn = document.getElementById('back-to-emotions-btn');
     const chooseNextActionBtn = document.getElementById('choose-next-action-btn');
-    const backToWhyDoBtn = document.getElementById('back-to-why-do-btn'); // FIXED LINE
+    const backToWhyDoBtn = document.getElementById('back-to-why-do-btn');
     const finalActionButtons = document.querySelectorAll('.action-btn');
     const backToIntroBtn = document.getElementById('back-to-intro-btn');
 
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     let selectedEmotion = '';
-    let teacherName = "Ms. Benne Hart"; // Customize your teacher's name here!
+    let teacherName = "Ms. Benne Hart"; // Updated to your preferred name
     const teacherNameDisplay = document.getElementById('teacher-name-display');
     if (teacherNameDisplay) {
         teacherNameDisplay.textContent = teacherName;
@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'scared': [
             { title: "Grounding Exercise (5-4-3-2-1)", description: "Name 5 things you can see, 4 things you can touch, 3 things you can hear, 2 things you can smell, and 1 thing you can taste. This helps you feel present and safe." },
             { title: "Create a Safety Plan", description: "Think about what would make you feel safer. Can you turn on a light? Call someone? Plan your next steps to feel more secure." },
-            { title: "Face a Small Fear (with support)", description: "If it's a small fear, try facing it a little bit at a time, with a trusted grown-up by your side." }
+            { title: "Face a Small Fear (with support)", description: "If it's a small fear, try facing it a little bit at a time, with a trusted grown-up by your side. You are brave!" }
         ],
         'excited': [
             { title: "Channel Your Energy", description: "Use your excitement for something active and positive! Play a game, build something, or help with a task that uses your energy." },
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ],
         'frustrated': [
             { title: "Take a Brain Break", description: "Step away from the frustrating task for a few minutes. Do something else completely (like a quick stretch), then come back to it with fresh eyes." },
-            { title: "Ask for a Hint", description: "It's okay to ask for help! See if a grown-up or friend can give you a small hint or explain it in a different way without doing it for you." },
+            { title: "Ask for a Hint", description: "It's okay to ask for help! See if a grown-up or friend can give you a small hint or explain it in a different way without doing it for you." Healey." },
             { title: "Problem-Solving Steps", description: "What's the problem? What are 3 different ways you could try to solve it? Which one will you try first? Keep trying!" }
         ],
         'shy': [
@@ -343,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const otherActionTextFilled = otherActionCheckbox.checked && whatDoOtherTextarea.value.trim() !== '';
 
         if (anyCheckboxSelected || otherReasonTextFilled || otherActionTextFilled) {
-            stage3FeedbackMessage.textContent = "Great job! Thinking about *why* you feel this way and *what you usually do* is a very important step. This helps you understand your feelings better and opens the door to new ways to feel good! When you're ready, click 'What Can I Do?' to explore helpful ideas.";
+            stage3FeedbackMessage.textContent = "Great job reflecting! Understanding your feelings is a brave and important step. This helps you learn new ways to cope. Ready for some helpful ideas? Click 'What Can I Do!'";
             stage3FeedbackMessage.style.display = 'block';
         } else {
             stage3FeedbackMessage.style.display = 'none';
@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Clear and populate checkboxes for actions
             actionsCheckboxesContainer.innerHTML = '';
-            if (emotionContextData[selectedEmotion] && emotionContextData[selectedEmotion].actions) { // THIS LINE WAS THE BUG! FIXED NOW.
+            if (emotionContextData[selectedEmotion] && emotionContextData[selectedEmotion].actions) {
                 emotionContextData[selectedEmotion].actions.forEach(action => {
                     createCheckbox('action', action, 'actions', actionsCheckboxesContainer);
                 });
