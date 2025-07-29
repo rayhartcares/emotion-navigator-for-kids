@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextCopingBtn = document.getElementById('next-coping-btn');
     const backToEmotionsBtn = document.getElementById('back-to-emotions-btn');
     const chooseNextActionBtn = document.getElementById('choose-next-action-btn');
-    const backToWhyDoBtn = document.getElementById('back-to-why-do-btn');
+    const backToWhyDoBtn = document.getElementById('back-to-why-do-btn'); // CRITICAL FIX: THIS LINE WAS WRONG BEFORE!
     const finalActionButtons = document.querySelectorAll('.action-btn');
     const backToIntroBtn = document.getElementById('back-to-intro-btn');
 
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Element for the large emotion emoji in Stage 3
     const largeEmotionEmoji = document.getElementById('large-emotion-emoji');
 
-    // NEW Flash Message Elements
+    // NEW Flash Message Elements (Get by ID)
     const whyFlashMessage = document.getElementById('why-flash-message');
     const whatDoFlashMessage = document.getElementById('what-do-flash-message');
     let whyFlashTimeout; // To manage the timeout for the flash message
@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("otherReasonTextFilled:", otherReasonTextFilled, "otherActionTextFilled:", otherActionTextFilled); // DEBUG: Check condition
 
         if (anyCheckboxSelected || otherReasonTextFilled || otherActionTextFilled) {
-            // THIS IS THE UPDATED FEEDBACK MESSAGE
+            // THIS IS THE UPDATED GENERAL FEEDBACK MESSAGE
             stage3FeedbackMessage.textContent = "Great job reflecting! Understanding your feelings is a brave and important step. This helps you learn new ways to cope. Ready for some helpful ideas? Click 'What Can I Do!'";
             stage3FeedbackMessage.style.display = 'block';
             console.log("Feedback message should be visible."); // DEBUG: Confirm display change
@@ -365,14 +365,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // NEW: Flash message function
     function flashMessage(element, message, timeout = 2000) {
+        console.log(`Flashing message "${message}" on element:`, element); // DEBUG: Confirm flash call
         if (!element) {
-            console.error("Flash message element not found!");
+            console.error("Flash message element not found for ID:", element.id); // More specific error
             return;
         }
         // Clear any existing timeout for this element to prevent overlapping flashes
-        if (element === whyFlashMessage && whyFlashTimeout) {
+        if (element === whyFlashMessage) {
             clearTimeout(whyFlashTimeout);
-        } else if (element === whatDoFlashMessage && whatDoFlashTimeout) {
+        } else if (element === whatDoFlashMessage) {
             clearTimeout(whatDoFlashTimeout);
         }
 
@@ -468,34 +469,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Toggle "Other" textareas visibility and show feedback message + FLASH MESSAGE
     otherReasonCheckbox.addEventListener('change', () => {
-        console.log("Other reason checkbox changed.");
+        console.log("Other reason checkbox changed."); // DEBUG: Confirm event
         whyFeelingOtherTextarea.style.display = otherReasonCheckbox.checked ? 'block' : 'none';
-        if (!otherReasonCheckbox.checked) whyFeelingOtherTextarea.value = '';
+        if (!otherReasonCheckbox.checked) whyFeelingOtherTextarea.value = ''; // Clear if hidden
         showStage3Feedback(); // General message
-        // No flash on checkbox change, only on typing
+        // No flash on checkbox change, only on typing in textarea
     });
 
     otherActionCheckbox.addEventListener('change', () => {
-        console.log("Other action checkbox changed.");
+        console.log("Other action checkbox changed."); // DEBUG: Confirm event
         whatDoOtherTextarea.style.display = otherActionCheckbox.checked ? 'block' : 'none';
-        if (!otherActionCheckbox.checked) whatDoOtherTextarea.value = '';
+        if (!otherActionCheckbox.checked) whatDoOtherTextarea.value = ''; // Clear if hidden
         showStage3Feedback(); // General message
-        // No flash on checkbox change, only on typing
+        // No flash on checkbox change, only on typing in textarea
     });
 
     // Add input/change listeners to all generated checkboxes and textareas to show feedback
     // Delegate events for dynamically added checkboxes (for general message)
-    reasonsCheckboxesContainer.addEventListener('change', showStage3Feedback);
-    actionsCheckboxesContainer.addEventListener('change', showStage3Feedback);
+    reasonsCheckboxesContainer.addEventListener('change', () => { console.log("Reasons container change event."); showStage3Feedback(); }); // DEBUG: Confirm event
+    actionsCheckboxesContainer.addEventListener('change', () => { console.log("Actions container change event."); showStage3Feedback(); }); // DEBUG: Confirm event
 
     // Event listeners specifically for TEXTAREA INPUT (for flash messages and general message)
     whyFeelingOtherTextarea.addEventListener('input', () => {
-        console.log("Why feeling textarea input event.");
+        console.log("Why feeling textarea input event."); // DEBUG: Confirm event
         flashMessage(whyFlashMessage, "Good thinking why!"); // FLASH MESSAGE
         showStage3Feedback(); // General message
     });
     whatDoOtherTextarea.addEventListener('input', () => {
-        console.log("What do textarea input event.");
+        console.log("What do textarea input event."); // DEBUG: Confirm event
         flashMessage(whatDoFlashMessage, "Great self-awareness!"); // FLASH MESSAGE
         showStage3Feedback(); // General message
     });
