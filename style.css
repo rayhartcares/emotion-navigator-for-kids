@@ -167,7 +167,7 @@ p {
     align-items: center; /* Vertically center icon and text */
     min-height: 22px; /* Ensure enough height for checkbox */
 }
-.checkbox-container span:first-child { /* The emoji icon itself */
+.checkbox-container .checkbox-icon { /* The emoji icon itself within the label */
     font-size: 1.2em; /* Slightly larger emoji */
     margin-right: 8px; /* Space between icon and text */
     display: inline-block; /* Ensure it respects margins */
@@ -252,50 +252,27 @@ p {
     box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
 }
 
-/* Dynamic Emotion-based Background Colors for Stage 3 */
-/* This will change the background of the app-container subtly */
-.emotion-active-happy { background-color: #fff9c4 !important; } /* Light yellow */
-.emotion-active-sad { background-color: #e3f2fd !important; } /* Light blue */
-.emotion-active-angry { background-color: #ffcdd2 !important; } /* Light red */
-.emotion-active-scared { background-color: #f3e5f5 !important; } /* Light purple */
-.emotion-active-excited { background-color: #fffde7 !important; } /* Pale yellow */
-.emotion-active-calm { background-color: #e8f5e9 !important; } /* Pale green */
-.emotion-active-frustrated { background-color: #ffe0b2 !important; } /* Light orange */
-.emotion-active-shy { background-color: #fce4ec !important; } /* Pale pink */
-.emotion-active-confused { background-color: #ede7f6 !important; } /* Pale lavender */
-.emotion-active-proud { background-color: #dcedc8 !important; } /* Pale green-yellow */
-.emotion-active-lonely { background-color: #e1f5fe !important; } /* Lighter blue */
-.emotion-active-disappointed { background-color: #fbe9e7 !important; } /* Lighter peach */
+/* --- Dynamic Emotion-based Background Colors for the entire body --- */
+/* This will change the background of the BODY to match the stage's mood */
+body.emotion-active-happy-bg { background-color: #fffde7; } /* Pale yellow */
+body.emotion-active-sad-bg { background-color: #e3f2fd; } /* Light blue */
+body.emotion-active-angry-bg { background-color: #ffebee; } /* Very light red */
+body.emotion-active-scared-bg { background-color: #f3e5f5; } /* Light purple */
+body.emotion-active-excited-bg { background-color: #fff8e1; } /* Lighter yellow */
+body.emotion-active-calm-bg { background-color: #e8f5e9; } /* Pale green */
+body.emotion-active-frustrated-bg { background-color: #fff3e0; } /* Pale orange */
+body.emotion-active-shy-bg { background-color: #fce4ec; } /* Pale pink */
+body.emotion-active-confused-bg { background-color: #ede7f6; } /* Pale lavender */
+body.emotion-active-proud-bg { background-color: #f1f8e9; } /* Pale green-yellow */
+body.emotion-active-lonely-bg { background-color: #e1f5fe; } /* Lighter blue */
+body.emotion-active-disappointed-bg { background-color: #fbe9e7; } /* Lighter peach */
 
-/* Remove default background if a specific emotion is active */
-.emotion-active-happy,
-.emotion-active-sad,
-.emotion-active-angry,
-.emotion-active-scared,
-.emotion-active-excited,
-.emotion-active-calm,
-.emotion-active-frustrated,
-.emotion-active-shy,
-.emotion-active-confused,
-.emotion-active-proud,
-.emotion-active-lonely,
-.emotion-active-disappointed {
-    background-color: #ffffff; /* Override .app-container background */
-}
-
-/* Make body background match stage 3 active color */
-body.emotion-active-happy-bg { background-color: #fff9c4; }
-body.emotion-active-sad-bg { background-color: #e3f2fd; }
-body.emotion-active-angry-bg { background-color: #ffcdd2; }
-body.emotion-active-scared-bg { background-color: #f3e5f5; }
-body.emotion-active-excited-bg { background-color: #fffde7; }
-body.emotion-active-calm-bg { background-color: #e8f5e9; }
-body.emotion-active-frustrated-bg { background-color: #ffe0b2; }
-body.emotion-active-shy-bg { background-color: #fce4ec; }
-body.emotion-active-confused-bg { background-color: #ede7f6; }
-body.emotion-active-proud-bg { background-color: #dcedc8; }
-body.emotion-active-lonely-bg { background-color: #e1f5fe; }
-body.emotion-active-disappointed-bg { background-color: #fbe9e7; }
+/* Specific background color for the .app-container when an emotion stage is active */
+/* This overrides the default .app-container background when an emotion is active,
+   allowing the body to show the theme color while the card remains white. */
+.stage#why-do-stage.active { background-color: #ffffff; }
+.stage#coping-stage.active { background-color: #ffffff; }
+.stage#final-action-stage.active { background-color: #ffffff; }
 
 
 .coping-options {
@@ -355,6 +332,17 @@ body.emotion-active-disappointed-bg { background-color: #fbe9e7; }
     transform: scale(1.05);
     border-color: #ff9800; /* Brighter orange */
 }
+
+/* Feedback Message Style */
+.feedback-message {
+    font-style: italic;
+    color: #00796b; /* Matching the main teal color */
+    margin-top: 15px;
+    font-size: 0.95em;
+    min-height: 20px; /* Give it some space even when empty */
+    display: none; /* Hidden by default, shown by JS */
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
