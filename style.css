@@ -150,9 +150,9 @@ p {
 }
 
 .choices-grid {
-    /* UPDATED: Force 2 columns, or 1 on very small screens */
+    /* FIXED: Force 2 columns on wider screens */
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Default to 2 columns */
+    grid-template-columns: repeat(2, 1fr); /* Force 2 columns */
     gap: 10px;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -175,7 +175,7 @@ p {
     align-items: center; /* Vertically center icon and text */
     min-height: 22px; /* Ensure enough height for checkbox */
 
-    /* NEW: Styles to keep text on a single line */
+    /* Styles to keep text on a single line */
     white-space: nowrap; /* Prevent text from wrapping */
     overflow: hidden;    /* Hide overflowed text */
     text-overflow: ellipsis; /* Add "..." for overflowed text */
@@ -268,7 +268,6 @@ p {
 }
 
 /* --- Dynamic Emotion-based Background Colors for the entire body --- */
-/* This will change the background of the BODY to match the stage's mood */
 body.emotion-active-happy-bg { background-color: #fffde7; } /* Pale yellow */
 body.emotion-active-sad-bg { background-color: #e3f2fd; } /* Light blue */
 body.emotion-active-angry-bg { background-color: #ffebee; } /* Very light red */
@@ -283,8 +282,6 @@ body.emotion-active-lonely-bg { background-color: #e1f5fe; } /* Lighter blue */
 body.emotion-active-disappointed-bg { background-color: #fbe9e7; } /* Lighter peach */
 
 /* Specific background color for the .app-container when an emotion stage is active */
-/* This overrides the default .app-container background when an emotion is active,
-   allowing the body to show the theme color while the card remains white. */
 .stage#why-do-stage.active { background-color: #ffffff; }
 .stage#coping-stage.active { background-color: #ffffff; }
 .stage#final-action-stage.active { background-color: #ffffff; }
@@ -379,7 +376,7 @@ body.emotion-active-disappointed-bg { background-color: #fbe9e7; } /* Lighter pe
         width: calc(100% - 10px); /* Single column on small screens */
     }
     .choices-grid {
-        /* UPDATED for single column on small screens */
+        /* FIXED: Force single column on small screens */
         grid-template-columns: 1fr;
     }
     .checkbox-container {
