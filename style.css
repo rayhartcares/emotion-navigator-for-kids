@@ -9,6 +9,7 @@ body {
     padding: 20px;
     box-sizing: border-box;
     overflow-y: auto; /* Allow scrolling for longer content */
+    transition: background-color 0.5s ease; /* Smooth background transition */
 }
 
 .app-container {
@@ -131,7 +132,7 @@ p {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* --- NEW STYLES FOR STAGE 3 CHECKBOXES AND TEXTAREAS --- */
+/* --- STYLES FOR STAGE 3 CHECKBOXES AND TEXTAREAS --- */
 .question-section {
     background-color: #f8fcfd; /* Very light blue background for sections */
     padding: 20px;
@@ -162,7 +163,16 @@ p {
     -ms-user-select: none;
     user-select: none;
     text-align: left; /* Align text within label */
+    display: flex; /* Use flexbox for icon and text alignment */
+    align-items: center; /* Vertically center icon and text */
+    min-height: 22px; /* Ensure enough height for checkbox */
 }
+.checkbox-container span:first-child { /* The emoji icon itself */
+    font-size: 1.2em; /* Slightly larger emoji */
+    margin-right: 8px; /* Space between icon and text */
+    display: inline-block; /* Ensure it respects margins */
+}
+
 
 /* Hide the browser's default checkbox */
 .checkbox-container input {
@@ -176,7 +186,7 @@ p {
 /* Create a custom checkbox */
 .checkmark {
     position: absolute;
-    top: 0;
+    top: 0; /* Align with the top of the label's content */
     left: 0;
     height: 22px;
     width: 22px;
@@ -242,6 +252,51 @@ p {
     box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
 }
 
+/* Dynamic Emotion-based Background Colors for Stage 3 */
+/* This will change the background of the app-container subtly */
+.emotion-active-happy { background-color: #fff9c4 !important; } /* Light yellow */
+.emotion-active-sad { background-color: #e3f2fd !important; } /* Light blue */
+.emotion-active-angry { background-color: #ffcdd2 !important; } /* Light red */
+.emotion-active-scared { background-color: #f3e5f5 !important; } /* Light purple */
+.emotion-active-excited { background-color: #fffde7 !important; } /* Pale yellow */
+.emotion-active-calm { background-color: #e8f5e9 !important; } /* Pale green */
+.emotion-active-frustrated { background-color: #ffe0b2 !important; } /* Light orange */
+.emotion-active-shy { background-color: #fce4ec !important; } /* Pale pink */
+.emotion-active-confused { background-color: #ede7f6 !important; } /* Pale lavender */
+.emotion-active-proud { background-color: #dcedc8 !important; } /* Pale green-yellow */
+.emotion-active-lonely { background-color: #e1f5fe !important; } /* Lighter blue */
+.emotion-active-disappointed { background-color: #fbe9e7 !important; } /* Lighter peach */
+
+/* Remove default background if a specific emotion is active */
+.emotion-active-happy,
+.emotion-active-sad,
+.emotion-active-angry,
+.emotion-active-scared,
+.emotion-active-excited,
+.emotion-active-calm,
+.emotion-active-frustrated,
+.emotion-active-shy,
+.emotion-active-confused,
+.emotion-active-proud,
+.emotion-active-lonely,
+.emotion-active-disappointed {
+    background-color: #ffffff; /* Override .app-container background */
+}
+
+/* Make body background match stage 3 active color */
+body.emotion-active-happy-bg { background-color: #fff9c4; }
+body.emotion-active-sad-bg { background-color: #e3f2fd; }
+body.emotion-active-angry-bg { background-color: #ffcdd2; }
+body.emotion-active-scared-bg { background-color: #f3e5f5; }
+body.emotion-active-excited-bg { background-color: #fffde7; }
+body.emotion-active-calm-bg { background-color: #e8f5e9; }
+body.emotion-active-frustrated-bg { background-color: #ffe0b2; }
+body.emotion-active-shy-bg { background-color: #fce4ec; }
+body.emotion-active-confused-bg { background-color: #ede7f6; }
+body.emotion-active-proud-bg { background-color: #dcedc8; }
+body.emotion-active-lonely-bg { background-color: #e1f5fe; }
+body.emotion-active-disappointed-bg { background-color: #fbe9e7; }
+
 
 .coping-options {
     display: flex;
@@ -303,6 +358,9 @@ p {
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
+    body {
+        padding: 10px; /* Reduce overall body padding on small screens */
+    }
     .app-container {
         padding: 20px;
     }
@@ -319,5 +377,18 @@ p {
     }
     .choices-grid {
         grid-template-columns: 1fr; /* Single column for checkboxes on small screens */
+    }
+    .checkbox-container {
+        padding-left: 30px; /* Adjust padding for smaller screens */
+    }
+    .checkmark {
+        height: 20px;
+        width: 20px;
+    }
+    .checkmark:after {
+        left: 6px;
+        top: 2px;
+        width: 4px;
+        height: 9px;
     }
 }
