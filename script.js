@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
             stage.style.display = 'none';
         });
 
-        // Display the target stage
+        // Display the target stage and add active class for animation
         stageToShow.style.display = 'block';
         setTimeout(() => {
             stageToShow.classList.add('active');
@@ -337,9 +337,11 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
         if (hasTextareaInput || hasCheckboxSelection) {
+            stage3FeedbackMessage.textContent = "Great job thinking about your feelings! Understanding *why* you feel a certain way and *what you usually do* helps us find the best ways to feel better. When you're ready, click 'What Can I Do?' to explore helpful ideas!";
             stage3FeedbackMessage.style.display = 'block';
         } else {
             stage3FeedbackMessage.style.display = 'none';
+            stage3FeedbackMessage.textContent = ""; // Clear text when hidden
         }
     }
 
@@ -396,6 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Hide feedback message initially
             stage3FeedbackMessage.style.display = 'none';
+            stage3FeedbackMessage.textContent = "";
 
 
             showStage(whyDoStage);
