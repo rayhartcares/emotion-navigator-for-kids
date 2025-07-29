@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chooseNextActionBtn = document.getElementById('choose-next-action-btn');
     const backToWhyDoBtn = document.getElementById('back-to-why-do-btn');
     const finalActionButtons = document.querySelectorAll('.action-btn');
+    const backToIntroBtn = document.getElementById('back-to-intro-btn'); // NEW BUTTON
 
     // Dynamic Text Elements
     const currentEmotionPrompt = document.getElementById('current-emotion-prompt');
@@ -33,20 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const otherActionCheckbox = document.getElementById('other-action-checkbox');
     const whatDoOtherTextarea = document.getElementById('what-do-other');
     const copingOptionsContainer = document.querySelector('.coping-options');
+    const stage3FeedbackMessage = document.getElementById('stage3-feedback-message'); // NEW FEEDBACK MESSAGE ELEMENT
 
-    // New element for the large emotion emoji in Stage 3
-    const largeEmotionEmoji = document.createElement('span');
-    largeEmotionEmoji.id = 'large-emotion-emoji';
-    largeEmotionEmoji.style.fontSize = '3em'; // Make it large
-    largeEmotionEmoji.style.display = 'block';
-    largeEmotionEmoji.style.marginBottom = '10px';
-    // Insert it right after the currentEmotionPrompt h2
-    currentEmotionPrompt.parentNode.insertBefore(largeEmotionEmoji, currentEmotionPrompt.nextSibling);
+    // Element for the large emotion emoji in Stage 3
+    const largeEmotionEmoji = document.getElementById('large-emotion-emoji');
 
 
     let selectedEmotion = '';
-    let teacherName = "Ms. Benne Hart"; // Customize your teacher's name here!
-     const teacherNameDisplay = document.getElementById('teacher-name-display');
+    let teacherName = "Ms. Rayhart"; // Customize your teacher's name here!
+    const teacherNameDisplay = document.getElementById('teacher-name-display');
     if (teacherNameDisplay) {
         teacherNameDisplay.textContent = teacherName;
     }
@@ -272,12 +268,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Helper Functions ---
     function showStage(stageToShow) {
-        // Remove any emotion-specific background classes from previous stage
+        // Remove any emotion-specific background classes from previous stages on the body
+        document.body.classList.forEach(cls => {
+            if (cls.startsWith('emotion-active-') && cls.endsWith('-bg')) {
+                document.body.classList.remove(cls);
+            }
+        });
+        // Remove specific background class from whyDoStage itself
         whyDoStage.classList.forEach(cls => {
             if (cls.startsWith('emotion-active-')) {
                 whyDoStage.classList.remove(cls);
             }
         });
+
 
         stages.forEach(stage => {
             stage.classList.remove('active');
@@ -287,6 +290,19 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { // Add active class after a tiny delay for animation
             stageToShow.classList.add('active');
         }, 10);
+
+        // Apply emotion-specific background to body when going to whyDoStage (Stage 3)
+        if (stageToShow === whyDoStage && selectedEmotion) {
+            document.body.classList.add(`emotion-active-${selectedEmotion}-bg`);
+        } else if (stageToShow === copingStage && selectedEmotion) {
+             // If going to coping stage, ensure body background matches previous emotion choice's color
+            document.body.classList.add(`emotion-active-${selectedEmotion}-bg`);
+        } else if (stageToShow === finalActionStage && selectedEmotion) {
+            // If going to final action stage, ensure body background matches previous emotion choice's color
+            document.body.classList.add(`emotion-active-${selectedEmotion}-bg`);
+        }
+
+
         appContainer.scrollTop = 0; // Scroll to top of app container when new stage shows
     }
 
@@ -302,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const label = document.createElement('label');
         label.classList.add('checkbox-container');
         // Check if item has an icon property, prepend it to the text
-        const displayText = item.icon ? `${item.icon} ${item.text}` : item.text;
+        const displayText = item.icon ? `<span class="checkbox-icon">${item.icon}</span> ${item.text}` : item.text;
         const value = item.text; // Use text as value for consistency
 
         label.innerHTML = `
@@ -313,11 +329,34 @@ document.addEventListener('DOMContentLoaded', () => {
         container.appendChild(label);
     }
 
+    // Function to show feedback message in Stage 3
+    function showStage3Feedback() {
+        // Only show if either textarea has content or checkboxes are selected
+        const hasTextareaInput = (whyFeelingOtherTextarea.value.trim() !== '' || whatDoOtherTextarea.value.trim() !== '');
+        const hasCheckboxSelection = (
+            document.querySelectorAll('#reasons-checkboxes input[name="reasons"]:checked').length > 0 ||
+            document.querySelectorAll('#actions-checkboxes input[name="actions"]:checked').length > 0
+        );
+
+        if (hasTextareaInput || hasCheckboxSelection) {
+            stage3FeedbackMessage.style.display = 'block';
+        } else {
+            stage3FeedbackMessage.style.display = 'none';
+        }
+    }
+
+
     // --- Event Listeners ---
     startFeelingsBtn.addEventListener('click', () => {
         playIntroAudio();
         showStage(emotionSelectStage);
     });
+
+    // NEW EVENT LISTENER for back button on Emotion Select Stage
+    backToIntroBtn.addEventListener('click', () => {
+        showStage(introStage);
+    });
+
 
     emotionButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -327,8 +366,8 @@ document.addEventListener('DOMContentLoaded', () => {
             button.classList.add('selected');
             selectedEmotion = button.dataset.emotion;
 
-            // Apply emotion-specific class to Stage 3 for styling
-            whyDoStage.classList.add('emotion-active-' + selectedEmotion);
+            // Apply emotion-specific class to Stage 3 for subtle background changes (handled in showStage)
+            // It will be applied when showStage is called for whyDoStage
 
             // Update text for next stage
             const emotionText = button.textContent.split(' ')[1]; // Get just the word, e.g., "Happy"
@@ -362,21 +401,33 @@ document.addEventListener('DOMContentLoaded', () => {
             whatDoOtherTextarea.style.display = 'none';
             otherActionCheckbox.checked = false;
 
+            // Hide feedback message initially
+            stage3FeedbackMessage.style.display = 'none';
+
 
             showStage(whyDoStage);
         });
     });
 
-    // Toggle "Other" textareas visibility
+    // Toggle "Other" textareas visibility and show feedback message
     otherReasonCheckbox.addEventListener('change', () => {
         whyFeelingOtherTextarea.style.display = otherReasonCheckbox.checked ? 'block' : 'none';
         if (!otherReasonCheckbox.checked) whyFeelingOtherTextarea.value = ''; // Clear if hidden
+        showStage3Feedback();
     });
 
     otherActionCheckbox.addEventListener('change', () => {
         whatDoOtherTextarea.style.display = otherActionCheckbox.checked ? 'block' : 'none';
         if (!otherActionCheckbox.checked) whatDoOtherTextarea.value = ''; // Clear if hidden
+        showStage3Feedback();
     });
+
+    // Add input/change listeners to all generated checkboxes and textareas to show feedback
+    reasonsCheckboxesContainer.addEventListener('change', showStage3Feedback);
+    actionsCheckboxesContainer.addEventListener('change', showStage3Feedback);
+    whyFeelingOtherTextarea.addEventListener('input', showStage3Feedback);
+    whatDoOtherTextarea.addEventListener('input', showStage3Feedback);
+
 
     nextCopingBtn.addEventListener('click', () => {
         // Gather selected reasons
