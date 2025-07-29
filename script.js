@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // This console.log should be the very first thing you see if the script loads.
     console.log("SCRIPT.JS HAS STARTED LOADING AND EXECUTING!");
 
     const appContainer = document.querySelector('.app-container');
@@ -39,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const copingOptionsContainer = document.querySelector('.coping-options');
     const stage3FeedbackMessage = document.getElementById('stage3-feedback-message');
 
-    // Element for the large emotion emoji in Stage 3 - IMPORTANT: Get it by ID now.
+    // Element for the large emotion emoji in Stage 3
     const largeEmotionEmoji = document.getElementById('large-emotion-emoji');
 
 
@@ -329,15 +328,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to show feedback message in Stage 3
     function showStage3Feedback() {
-        // Only show if either textarea has content or checkboxes are selected
-        const hasTextareaInput = (whyFeelingOtherTextarea.value.trim() !== '' || whatDoOtherTextarea.value.trim() !== '');
-        const hasCheckboxSelection = (
-            document.querySelectorAll('#reasons-checkboxes input[name="reasons"]:checked').length > 0 ||
-            document.querySelectorAll('#actions-checkboxes input[name="actions"]:checked').length > 0
-        );
+        // Get all reasons and actions checkboxes
+        const allReasonCheckboxes = document.querySelectorAll('#reasons-checkboxes input[name="reasons"]');
+        const allActionCheckboxes = document.querySelectorAll('#actions-checkboxes input[name="actions"]');
 
-        if (hasTextareaInput || hasCheckboxSelection) {
-            stage3FeedbackMessage.textContent = "Great job thinking about your feelings! Understanding *why* you feel a certain way and *what you usually do* helps us find the best ways to feel better. When you're ready, click 'What Can I Do?' to explore helpful ideas!";
+        // Check if any checkbox is selected
+        const anyCheckboxSelected = Array.from(allReasonCheckboxes).some(cb => cb.checked) ||
+                                    Array.from(allActionCheckboxes).some(cb => cb.checked) ||
+                                    otherReasonCheckbox.checked ||
+                                    otherActionCheckbox.checked;
+
+        // Check if "other" textareas have content IF their checkbox is selected
+        const otherReasonTextFilled = otherReasonCheckbox.checked && whyFeelingOtherTextarea.value.trim() !== '';
+        const otherActionTextFilled = otherActionCheckbox.checked && whatDoOtherTextarea.value.trim() !== '';
+
+        if (anyCheckboxSelected || otherReasonTextFilled || otherActionTextFilled) {
+            stage3FeedbackMessage.textContent = "Great job! Thinking about *why* you feel this way and *what you usually do* is a very important step. This helps you understand your feelings better and opens the door to new ways to feel good! When you're ready, click 'What Can I Do?' to explore helpful ideas.";
             stage3FeedbackMessage.style.display = 'block';
         } else {
             stage3FeedbackMessage.style.display = 'none';
@@ -387,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Clear and populate checkboxes for actions
             actionsCheckboxesContainer.innerHTML = '';
-            if (emotionContextData[selectedEmotion] && emotionContextData[selectedEmotion].actions) {
+            if (emotionContextData[selectedEmotion] && emotionContextData[selectedEdition].actions) { // BUG FIX: changed edition to selectedEmotion
                 emotionContextData[selectedEmotion].actions.forEach(action => {
                     createCheckbox('action', action, 'actions', actionsCheckboxesContainer);
                 });
@@ -419,6 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Add input/change listeners to all generated checkboxes and textareas to show feedback
+    // Delegate events for dynamically added checkboxes
     reasonsCheckboxesContainer.addEventListener('change', showStage3Feedback);
     actionsCheckboxesContainer.addEventListener('change', showStage3Feedback);
     whyFeelingOtherTextarea.addEventListener('input', showStage3Feedback);
