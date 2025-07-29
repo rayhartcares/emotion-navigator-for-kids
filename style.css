@@ -150,8 +150,9 @@ p {
 }
 
 .choices-grid {
+    /* UPDATED: Force 2 columns, or 1 on very small screens */
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(2, 1fr); /* Default to 2 columns */
     gap: 10px;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -173,11 +174,18 @@ p {
     display: flex; /* Use flexbox for icon and text alignment */
     align-items: center; /* Vertically center icon and text */
     min-height: 22px; /* Ensure enough height for checkbox */
+
+    /* NEW: Styles to keep text on a single line */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden;    /* Hide overflowed text */
+    text-overflow: ellipsis; /* Add "..." for overflowed text */
+    padding-right: 10px; /* Give some space for ellipsis */
 }
 .checkbox-container .checkbox-icon { /* The emoji icon itself within the label */
     font-size: 1.2em; /* Slightly larger emoji */
     margin-right: 8px; /* Space between icon and text */
     display: inline-block; /* Ensure it respects margins */
+    flex-shrink: 0; /* Prevent icon from shrinking */
 }
 
 
@@ -371,7 +379,8 @@ body.emotion-active-disappointed-bg { background-color: #fbe9e7; } /* Lighter pe
         width: calc(100% - 10px); /* Single column on small screens */
     }
     .choices-grid {
-        grid-template-columns: 1fr; /* Single column for checkboxes on small screens */
+        /* UPDATED for single column on small screens */
+        grid-template-columns: 1fr;
     }
     .checkbox-container {
         padding-left: 30px; /* Adjust padding for smaller screens */
