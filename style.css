@@ -133,6 +133,13 @@ p {
 }
 
 /* --- STYLES FOR STAGE 3 CHECKBOXES AND TEXTAREAS --- */
+/* Large emotion emoji style in Stage 3 */
+.large-emotion-emoji-style {
+    font-size: 3em; /* Make it large */
+    display: block;
+    margin-bottom: 10px;
+}
+
 .question-section {
     background-color: #f8fcfd; /* Very light blue background for sections */
     padding: 20px;
