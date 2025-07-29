@@ -267,6 +267,36 @@ p {
     box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
 }
 
+/* --- NEW FLASH MESSAGE STYLES --- */
+.flash-message {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-top: 10px; /* Space above */
+    margin-bottom: 10px; /* Space below */
+    padding: 8px 15px;
+    border-radius: 20px; /* More rounded */
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.4s ease-out; /* Smooth fade */
+    display: none; /* Hidden by default, changed by JS */
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Subtle shadow */
+    width: fit-content; /* Fit content */
+    max-width: 90%; /* Max width */
+    margin-left: auto; /* Center horizontally */
+    margin-right: auto; /* Center horizontally */
+}
+
+.why-message {
+    color: white;
+    background-color: #673ab7; /* Deep Purple */
+}
+
+.what-do-message {
+    color: white;
+    background-color: #4caf50; /* Green */
+}
+
+
 /* --- Dynamic Emotion-based Background Colors for the entire body --- */
 body.emotion-active-happy-bg { background-color: #fffde7; } /* Pale yellow */
 body.emotion-active-sad-bg { background-color: #e3f2fd; } /* Light blue */
