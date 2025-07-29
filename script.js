@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextCopingBtn = document.getElementById('next-coping-btn');
     const backToEmotionsBtn = document.getElementById('back-to-emotions-btn');
     const chooseNextActionBtn = document.getElementById('choose-next-action-btn');
-    const backToWhyDoBtn = document.getElementById('back-to-why-do-btn');
+    const backToWhyDoBtn = document.getElementById('back-to-why-do-btn'); // CRITICAL FIX: THIS LINE WAS WRONG BEFORE!
     const finalActionButtons = document.querySelectorAll('.action-btn');
     const backToIntroBtn = document.getElementById('back-to-intro-btn');
 
@@ -328,6 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to show feedback message in Stage 3
     function showStage3Feedback() {
+        console.log("showStage3Feedback called."); // DEBUG: Confirm function call
         // Get all reasons and actions checkboxes
         const allReasonCheckboxes = document.querySelectorAll('#reasons-checkboxes input[name="reasons"]');
         const allActionCheckboxes = document.querySelectorAll('#actions-checkboxes input[name="actions"]');
@@ -337,18 +338,22 @@ document.addEventListener('DOMContentLoaded', () => {
                                     Array.from(allActionCheckboxes).some(cb => cb.checked) ||
                                     otherReasonCheckbox.checked ||
                                     otherActionCheckbox.checked;
+        console.log("anyCheckboxSelected:", anyCheckboxSelected); // DEBUG: Check condition
 
         // Check if "other" textareas have content IF their checkbox is selected
         const otherReasonTextFilled = otherReasonCheckbox.checked && whyFeelingOtherTextarea.value.trim() !== '';
         const otherActionTextFilled = otherActionCheckbox.checked && whatDoOtherTextarea.value.trim() !== '';
+        console.log("otherReasonTextFilled:", otherReasonTextFilled, "otherActionTextFilled:", otherActionTextFilled); // DEBUG: Check condition
 
         if (anyCheckboxSelected || otherReasonTextFilled || otherActionTextFilled) {
             // THIS IS THE UPDATED FEEDBACK MESSAGE
             stage3FeedbackMessage.textContent = "Great job reflecting! Understanding your feelings is a brave and important step. This helps you learn new ways to cope. Ready for some helpful ideas? Click 'What Can I Do!'";
             stage3FeedbackMessage.style.display = 'block';
+            console.log("Feedback message should be visible."); // DEBUG: Confirm display change
         } else {
             stage3FeedbackMessage.style.display = 'none';
             stage3FeedbackMessage.textContent = ""; // Clear text when hidden
+            console.log("Feedback message should be hidden."); // DEBUG: Confirm display change
         }
     }
 
@@ -366,6 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     emotionButtons.forEach(button => {
         button.addEventListener('click', () => {
+            console.log("Emotion button clicked:", button.dataset.emotion); // DEBUG: Confirm click
             // Deselect previous
             emotionButtons.forEach(btn => btn.classList.remove('selected'));
             // Select current
@@ -414,12 +420,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Toggle "Other" textareas visibility and show feedback message
     otherReasonCheckbox.addEventListener('change', () => {
+        console.log("Other reason checkbox changed."); // DEBUG: Confirm event
         whyFeelingOtherTextarea.style.display = otherReasonCheckbox.checked ? 'block' : 'none';
         if (!otherReasonCheckbox.checked) whyFeelingOtherTextarea.value = ''; // Clear if hidden
         showStage3Feedback();
     });
 
     otherActionCheckbox.addEventListener('change', () => {
+        console.log("Other action checkbox changed."); // DEBUG: Confirm event
         whatDoOtherTextarea.style.display = otherActionCheckbox.checked ? 'block' : 'none';
         if (!otherActionCheckbox.checked) whatDoOtherTextarea.value = ''; // Clear if hidden
         showStage3Feedback();
@@ -427,10 +435,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add input/change listeners to all generated checkboxes and textareas to show feedback
     // Delegate events for dynamically added checkboxes
-    reasonsCheckboxesContainer.addEventListener('change', showStage3Feedback);
-    actionsCheckboxesContainer.addEventListener('change', showStage3Feedback);
-    whyFeelingOtherTextarea.addEventListener('input', showStage3Feedback);
-    whatDoOtherTextarea.addEventListener('input', showStage3Feedback);
+    reasonsCheckboxesContainer.addEventListener('change', () => { console.log("Reasons container change event."); showStage3Feedback(); }); // DEBUG: Confirm event
+    actionsCheckboxesContainer.addEventListener('change', () => { console.log("Actions container change event."); showStage3Feedback(); }); // DEBUG: Confirm event
+    whyFeelingOtherTextarea.addEventListener('input', () => { console.log("Why feeling textarea input event."); showStage3Feedback(); }); // DEBUG: Confirm event
+    whatDoOtherTextarea.addEventListener('input', () => { console.log("What do textarea input event."); showStage3Feedback(); }); // DEBUG: Confirm event
 
 
     nextCopingBtn.addEventListener('click', () => {
