@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     let selectedEmotion = '';
-    let teacherName = "Ms. Rayhart"; // Customize your teacher's name here!
+    let teacherName = "Ms. Benne Hart"; // Customize your teacher's name here!
     const teacherNameDisplay = document.getElementById('teacher-name-display');
     if (teacherNameDisplay) {
         teacherNameDisplay.textContent = teacherName;
