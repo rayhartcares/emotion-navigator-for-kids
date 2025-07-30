@@ -203,10 +203,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 { text: "Think about friends", icon: "💭" }, { text: "Try to find someone", icon: "🔎" }
             ]
         },
-        'disappointed': [
-            { text: "My plans didn't work out", icon: "🗓️❌" }, { text: "I didn't get what I hoped for", icon: "😞" },
-            { text: "Someone let me down", icon: "💔" }, { text: "I didn't win/succeed", icon: "🥈" },
-            { text: "Something I looked forward to was cancelled", icon: "🚫" }, { text: "Things aren't fair", icon: "⚖️" }
+        'disappointed': {
+            reasons: [
+                { text: "My plans didn't work out", icon: "🗓️❌" }, { text: "I didn't get what I hoped for", icon: "😞" },
+                { text: "Someone let me down", icon: "💔" }, { text: "I didn't win/succeed", icon: "🥈" },
+                { text: "Something I looked forward to was cancelled", icon: "🚫" }, { text: "Things aren't fair", icon: "⚖️" }
             ],
             actions: [
                 { text: "Feel sad", icon: "😔" }, { text: "Feel frustrated", icon: "😤" },
@@ -406,36 +407,39 @@ document.addEventListener('DOMContentLoaded', () => {
         modalFeedbackTitle.textContent = title;
         modalFeedbackMessage.textContent = message;
         customFeedbackModalOverlay.classList.add('active'); // Activate the overlay
-        currentModalAction = actionToPerformOnClose;
-        console.log(`Modal activated for action: ${currentModalAction}`);
+        currentModalAction = actionToPerformOnClose; // Store action for when modal closes
+        console.log(`Modal activated for action: ${currentModalAction}`); // Debug
     }
 
     // Event listener for modal close button
     modalCloseBtn.addEventListener('click', () => {
-        console.log("Modal close button clicked. Stored action:", currentModalAction);
+        console.log("Modal close button clicked. Stored action:", currentModalAction); // Debug
         customFeedbackModalOverlay.classList.remove('active'); // Deactivate the overlay (fades out)
         // Wait for the fade-out transition to complete before changing stage
         customFeedbackModalOverlay.addEventListener('transitionend', function handler() {
-            console.log("Modal transition ended.");
-            customFeedbackModalOverlay.removeEventListener('transitionend', handler);
+            console.log("Modal transition ended."); // Debug
+            customFeedbackModalOverlay.removeEventListener('transitionend', handler); // Remove self
             // Perform the stored action
             if (currentModalAction === 'start-over') {
-                console.log("Performing start-over action.");
+                console.log("Performing start-over action."); // Debug
+                // Reset all states and inputs for a fresh start
                 selectedEmotion = '';
                 document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
                 document.querySelectorAll('textarea').forEach(ta => ta.value = '');
                 whyFeelingOtherTextarea.style.display = 'none';
                 whatDoOtherTextarea.style.display = 'none';
                 emotionButtons.forEach(btn => btn.classList.remove('selected'));
-                largeEmotionEmoji.textContent = '';
+                largeEmotionEmoji.textContent = ''; // Clear the large emoji
                 showStage(introStage);
             } else if (currentModalAction === 'try-coping') {
+                 // Do nothing, as 'try-coping' already triggers nextCopingBtn.click()
+                 // (This case is handled directly in finalActionButtons click handler)
                  console.log("Modal closed for 'try-coping', no additional stage change needed here.");
             } else {
-                 console.log("Performing default action: return to intro stage.");
-                 showStage(introStage);
+                 console.log("Performing default action: return to intro stage."); // Debug
+                 showStage(introStage); // Default: go back to intro
             }
-            currentModalAction = null;
+            currentModalAction = null; // Clear stored action
         });
     });
 
@@ -513,17 +517,18 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Other reason checkbox changed.");
         whyFeelingOtherTextarea.style.display = otherReasonCheckbox.checked ? 'block' : 'none';
         if (!otherReasonCheckbox.checked) whyFeelingOtherTextarea.value = '';
-        showStage3Feedback();
+        showStage3Feedback(); // General message
     });
 
     otherActionCheckbox.addEventListener('change', () => {
         console.log("Other action checkbox changed.");
         whatDoOtherTextarea.style.display = otherActionCheckbox.checked ? 'block' : 'none';
         if (!otherActionCheckbox.checked) whatDoOtherTextarea.value = '';
-        showStage3Feedback();
+        showStage3Feedback(); // General message
     });
 
     // Add input/change listeners to all generated checkboxes and textareas to show feedback
+    // Delegate events for dynamically added checkboxes (for general message)
     reasonsCheckboxesContainer.addEventListener('change', showStage3Feedback);
     actionsCheckboxesContainer.addEventListener('change', showStage3Feedback);
 
@@ -571,20 +576,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // --- Refine suggestions based on 'What do you usually do?' (simple keyword check) ---
+        // We'll add general helpful coping mechanisms if the child identifies negative actions
         const negativeActionKeywords = ['yell', 'scream', 'hit', 'break', 'punch', 'throw', 'hide', 'run away', 'shut down', 'cry a lot', 'kick', 'bite'];
         const hasNegativeAction = selectedActions.some(action =>
             negativeActionKeywords.some(keyword => action.toLowerCase().includes(keyword))
         );
 
         if (hasNegativeAction) {
+             // Add some basic regulation/communication tips if negative actions are identified
              const specificRegulationTips = [
                  { title: "Ask for Help", description: "If you usually lash out or hide, remember it's brave to ask for help from an adult. They want to support you." },
                  { title: "Use Your Words Clearly", description: "Instead of hitting or yelling, try to explain what you need or how you feel using words, even if it's hard." },
                  { title: "Take Space Safely", description: "If you feel like you might break something, take a few steps back from the situation. Give yourself a little space to cool down in a safe spot." }
              ];
              specificRegulationTips.forEach(tip => {
-                 if (!suggestions.some(s => s.title === tip.title)) {
-                     suggestions.unshift(tip);
+                 if (!suggestions.some(s => s.title === tip.title)) { // Avoid duplicates
+                     suggestions.unshift(tip); // Add to the beginning
                  }
              });
             copingIntroPrompt.textContent = `It sounds like you might be doing things that don't always help you feel better. Let's find some new ways!`;
@@ -592,11 +599,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
 
+        // Display 3-4 suggestions (can be adjusted)
+        // Shuffle to get a random selection each time, then pick from the top
         suggestions.sort(() => 0.5 - Math.random());
-        const displayedSuggestions = suggestions.slice(0, 4);
+        const displayedSuggestions = suggestions.slice(0, 4); // Display up to 4 coping strategies
 
-        copingOptionsContainer.innerHTML = '';
-        if (displayedSuggestions.length === 0 && suggestions.length > 0) {
+        copingOptionsContainer.innerHTML = ''; // Clear previous options
+        if (displayedSuggestions.length === 0 && suggestions.length > 0) { // Fallback if slice result empty (e.g., if less than 4 options)
              suggestions.slice(0, suggestions.length).forEach(coping => {
                  addCopingCard(coping);
              });
@@ -604,7 +613,7 @@ document.addEventListener('DOMContentLoaded', () => {
             displayedSuggestions.forEach(coping => {
                 addCopingCard(coping);
             });
-        } else {
+        } else { // Truly no suggestions (shouldn't happen with our data)
              copingOptionsContainer.innerHTML = `<p>No specific coping strategies found for this emotion right now. But remember, taking a deep breath and talking to a grown-up are always great ideas!</p>`;
         }
 
@@ -634,7 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showStage(whyDoStage);
     });
 
-    // --- FINAL ACTION BUTTONS: Call Custom Modal ---
+    // --- UPDATED FINAL ACTION BUTTONS ---
     finalActionButtons.forEach(button => {
         button.addEventListener('click', () => {
             const action = button.dataset.action;
@@ -645,7 +654,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'try-coping':
                     title = "Keep Exploring!";
                     message = "Great! Trying a coping strategy is a fantastic way to help yourself. Go ahead and pick one that feels right!";
-                    nextCopingBtn.click(); // Directly go back to coping stage or re-trigger suggestions
+                    // Directly go back to coping stage or re-trigger suggestions
+                    nextCopingBtn.click();
                     return;
                 case 'talk-to-adult':
                     title = "You're So Brave!";
@@ -670,14 +680,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'start-over':
                     title = "New Adventure!";
                     message = "It's brave to explore your feelings! Whenever you're ready, we can start a new feelings journey. Remember, you can always come back here!";
-                    break; // Action handled by modal close for full reset
+                    // This action handled by modalCloseBtn callback for full reset
+                    break;
                 default:
                     title = "Great Choice!";
                     message = "You chose to do something! That's great! Keep exploring and learning about your feelings.";
             }
 
-            if (action !== 'try-coping') {
-                showMessageModal(title, message, action); // Show custom modal
+            // Show custom modal instead of alert
+            if (action !== 'try-coping') { // 'try-coping' directly navigates, doesn't need modal
+                showMessageModal(title, message, action); // Pass the action to modal for post-close logic
             }
         });
     });
