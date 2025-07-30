@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // NEW: Flash message function
-    function flashMessage(element, message, timeout = 2000) {
+    function flashMessage(element, message, timeout = 10000) { // Change 2000 to 10000
         console.log(`Flashing message "${message}" on element:`, element); // DEBUG: Confirm flash call
         if (!element) {
             console.error("Flash message element not found for ID:", element.id); // More specific error
