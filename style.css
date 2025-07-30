@@ -385,7 +385,7 @@ body.emotion-active-disappointed-bg { background-color: #fbe9e7; } /* Lighter pe
     display: none; /* Hidden by default, shown by JS */
 }
 
-/* --- NEW MODAL STYLES --- */
+/* --- CUSTOM MODAL STYLES --- */
 .modal-overlay {
     position: fixed; /* Fixed to viewport */
     top: 0;
